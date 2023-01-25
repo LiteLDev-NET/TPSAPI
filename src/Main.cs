@@ -34,7 +34,7 @@ public class TPSAPI : IPluginInitializer
 }
 
 internal delegate void TickHookDelegate(nint @this);
-[HookSymbol("?_update@ServerInstance@@AEAAXXZ")]
+[HookSymbol("?tick@ServerLevel@@UEAAXXZ")]
 internal class TickHook : THookBase<TickHookDelegate>
 {
     public override TickHookDelegate Hook => (@this) =>
