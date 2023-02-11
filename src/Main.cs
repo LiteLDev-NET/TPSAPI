@@ -1,9 +1,11 @@
-﻿using LiteLoader.Hook;
+﻿using LiteLoader.Event;
+using LiteLoader.Hook;
 using LiteLoader.NET;
 using LiteLoader.RemoteCall;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 
@@ -24,12 +26,17 @@ public class TPSAPI : IPluginInitializer
             Data.MSPTs.Clear();
         };
         Thook.RegisterHook<TickHook, TickHookDelegate>();
-        timer.Start();
+        ServerStartedEvent.Subscribe(ev =>
+        {
+            timer.Start();
+            return true;
+        });
         _ = RemoteCallAPI.ExportAs("TPSAPI", "GetAvgMSPT", () => Data.AvgMSPT);
         _ = RemoteCallAPI.ExportAs("TPSAPI", "GetAvgTPS", () => Data.AvgTPS);
         _ = RemoteCallAPI.ExportAs("TPSAPI", "GetRealTPS", () => Data.RealTPS);
         _ = RemoteCallAPI.ExportAs("TPSAPI", "GetCurrectMSPT", () => Data.CurrectMSPT);
         _ = RemoteCallAPI.ExportAs("TPSAPI", "GetCurrectTPS", () => Data.CurrectTPS);
+        _ = RemoteCallAPI.ExportAs("InfoAPI", "GetWorkingSet", () => Process.GetCurrentProcess().WorkingSet64);
     }
 }
 
