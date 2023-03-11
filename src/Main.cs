@@ -1,13 +1,9 @@
-﻿using LiteLoader.Event;
+using LiteLoader.Event;
 using LiteLoader.Hook;
 using LiteLoader.NET;
 using LiteLoader.RemoteCall;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Timers;
 
 namespace TPSAPI;
 [PluginMain("TPSAPI")]
@@ -15,10 +11,10 @@ public class TPSAPI : IPluginInitializer
 {
     public string Introduction => "TPSAPI";
     public Dictionary<string, string> MetaData => new();
-    public Version Version => new(1, 0, 0);
+    public Version Version => new();
     public void OnInitialize()
     {
-        Timer timer = new(1000);
+        System.Timers.Timer timer = new(1000);
         timer.Elapsed += (sender, e) =>
         {
             Data.RealTPS = (uint)Data.MSPTs.Count;
@@ -31,12 +27,12 @@ public class TPSAPI : IPluginInitializer
             timer.Start();
             return true;
         });
-        _ = RemoteCallAPI.ExportAs("TPSAPI", "GetAvgMSPT", () => Data.AvgMSPT);
-        _ = RemoteCallAPI.ExportAs("TPSAPI", "GetAvgTPS", () => Data.AvgTPS);
-        _ = RemoteCallAPI.ExportAs("TPSAPI", "GetRealTPS", () => Data.RealTPS);
-        _ = RemoteCallAPI.ExportAs("TPSAPI", "GetCurrectMSPT", () => Data.CurrectMSPT);
-        _ = RemoteCallAPI.ExportAs("TPSAPI", "GetCurrectTPS", () => Data.CurrectTPS);
-        _ = RemoteCallAPI.ExportAs("InfoAPI", "GetWorkingSet", () => Process.GetCurrentProcess().WorkingSet64);
+        RemoteCallAPI.ExportAs("TPSAPI", "GetAvgMSPT", () => Data.AvgMSPT);
+        RemoteCallAPI.ExportAs("TPSAPI", "GetAvgTPS", () => Data.AvgTPS);
+        RemoteCallAPI.ExportAs("TPSAPI", "GetRealTPS", () => Data.RealTPS);
+        RemoteCallAPI.ExportAs("TPSAPI", "GetCurrectMSPT", () => Data.CurrectMSPT);
+        RemoteCallAPI.ExportAs("TPSAPI", "GetCurrectTPS", () => Data.CurrectTPS);
+        RemoteCallAPI.ExportAs("InfoAPI", "GetWorkingSet", () => Process.GetCurrentProcess().WorkingSet64);
     }
 }
 
